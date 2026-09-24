@@ -1,5 +1,5 @@
 (ns fisheryaquaculture.actor-test
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [kotoba.test :refer [deftest is testing]]
             [fisheryaquaculture.actor :as actor]
             [fisheryaquaculture.store :as store]))
 
