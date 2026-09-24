@@ -1,5 +1,5 @@
 (ns fisheryaquaculture.governor-test
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [kotoba.test :refer [deftest is testing]]
             [fisheryaquaculture.store :as store]
             [fisheryaquaculture.advisor :as advisor]
             [fisheryaquaculture.governor :as governor]))
