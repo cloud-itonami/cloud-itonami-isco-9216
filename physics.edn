@@ -1,0 +1,34 @@
+;; What this vertical's robot physically does, declared for
+;; kotoba.robotics.process (kotoba-lang/robotics). `kbb -M:physics` runs it.
+;;
+;; README "Robotics premise": a site scheduling/logistics coordination robot
+;; performs crew scheduling, harvest/task logging and feed/equipment
+;; procurement coordination for a fishery or aquaculture crew (ISCO 9216).
+;; It never performs fishery or aquaculture work. Its physical work is the
+;; logistics: carrying feed bags along the pier to the net pens, and draining
+;; a fish holding tank for its scheduled cleaning.
+;;
+;; Every number without a cited source is marked `estimate` in its :basis.
+;; Replacing an estimate with a sourced value is this bot's growth work.
+{:physics/schema "itonami.physical-ai.spec.v1"
+ :repo "cloud-itonami/cloud-itonami-isco-9216"
+ :cases
+ [{:id :feed-bags-along-pier
+   :kind :transport
+   :procedure "pier robot carries 25 kg fish-feed bags (up to a 16-bag pallet) 100 m along the timber pier to the net-pen walkway"
+   :params {:mass-kg 70.0 :payload-kg 75.0 :distance-m 100.0 :v-max-mps 1.0 :a-max-mps2 0.4
+            :brake-decel-mps2 0.6 :drive-force-n 150.0 :crr 0.03
+            :cog-height-m 0.40 :support-half-length-m 0.30 :payload-cog-height-m 0.70
+            :max-time-s 1800.0}
+   :sweep {:param :payload-kg :values [25.0 50.0 100.0 200.0 300.0 400.0]}
+   :quantity :cycle-time-s
+   :limit {:max 130.0 :basis "estimate: one feed run within the pen's feeding window"}
+   :boundary {:lo 0.0 :hi 500.0}}
+  {:id :holding-tank-drain
+   :kind :tank-drain
+   :procedure "drain a 3 m2 fish holding tank from 1.2 m to 0.1 m through its bottom drain valve after the fish are moved out"
+   :params {:tank-area-m2 3.0 :h0-m 1.2 :h-target-m 0.1 :cd 0.62 :q-in-m3s 0.0}
+   :sweep {:param :orifice-area-m2 :values [0.0005 0.001 0.002 0.003 0.005]}
+   :quantity :time-to-target-s
+   :limit {:max 1200.0 :basis "estimate: drain within 20 minutes so cleaning fits the scheduled tank rotation"}
+   :boundary {:lo 0.0003 :hi 0.008}}]}
